@@ -1,5 +1,4 @@
 const express = require("express");
-
 const cors = require("cors");
 
 // Initialize app //
@@ -17,10 +16,7 @@ app.use(express.json()); // parse JSON data from HTTP requests //
 app.use(express.urlencoded({ extended: true })); // permit req.body //
 
 const router = require("./router/productRoutes.js");
-const reviewRouter = require("./router/reviewRoutes.js")
-
 app.use("/api", router);
-app.use("/api",reviewRouter);
 
 // app route//
 

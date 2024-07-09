@@ -3,6 +3,7 @@ const db = require("../models/model");
 // create a modal //
 
 const Product = db.products;
+const Review = db.reviews;
 
 // create a new product ///
 
@@ -18,7 +19,12 @@ const addProduct = async (req, res) => {
 // get all products //
 
 const getAllProducts = async (req, res) => {
-  let products = await Product.findAll({});
+  // step over the first 10 elements, and take 2 //
+  let products = await Product.findAll({
+    offset:0,
+    limit: 2,
+    order: [["title", "DESC"]],
+  });
   res.status(200).send(products);
 };
 
@@ -26,7 +32,7 @@ const getAllProducts = async (req, res) => {
 
 const getSingleProduct = async (req, res) => {
   let id = req.params.id;
-  let product = await Product.findOne({ where: { id: id } });
+  let product = await Product.findOne({ where: { id: id, published: true } });
   res.status(200).send(product);
 };
 
@@ -53,6 +59,21 @@ const deleteProduct = async (req, res) => {
   res.status(200).send("Product deleted");
 };
 
+// Get product reviews //
+
+const getProductReviews = async (req, res) => {
+  const data = await Product.findAll({
+    include: [
+      {
+        model: Review,
+        as: "review",
+      },
+    ],
+    where: { id: 2 },
+  });
+  res.status(200).send(data);
+};
+
 module.exports = {
   addProduct,
   getSingleProduct,
@@ -60,4 +81,5 @@ module.exports = {
   getAllProducts,
   updateProduct,
   deleteProduct,
+  getProductReviews,
 };
