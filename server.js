@@ -5,18 +5,18 @@ const cors = require("cors");
 
 const app = express();
 
-const corsOption = {
-  origin: "http://localhost:8081",
-};
-
 // middleware set-up //
 
-app.use(cors(corsOption));
+app.use(cors());
 app.use(express.json()); // parse JSON data from HTTP requests //
 app.use(express.urlencoded({ extended: true })); // permit req.body //
 
 const router = require("./router/productRoutes.js");
 app.use("/api", router);
+
+//static image folder //
+
+app.use("/Images", express.static("./Images"));
 
 // app route//
 

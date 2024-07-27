@@ -12,9 +12,10 @@ const {
   updateProduct,
   deleteProduct,
   getProductReviews,
+  upload,
 } = productController;
 
-router.post("/addProduct", addProduct);
+router.post("/addProduct", upload, addProduct);
 router.get("/allProducts", getAllProducts);
 router.put("/updateProduct/:id", updateProduct);
 router.delete("/deleteProduct/:id", deleteProduct);
@@ -24,7 +25,7 @@ router.get("/single/:id", getSingleProduct);
 // Reviews //
 
 router.get("/allReviews", reviewController.allReviews);
-router.post("/addReview", reviewController.addReview);
-router.get("/getProductReviews", getProductReviews);
+router.post("/addReview/:id", reviewController.addReview);
+router.get("/getProductReviews/:id", getProductReviews);
 
 module.exports = router;

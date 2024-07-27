@@ -19,9 +19,6 @@ databaseConfig
 
 const db = {};
 
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
-
 db.products = require("./models/productModel")(sequelize, DataTypes);
 db.reviews = require("./models/reviewModel")(sequelize, DataTypes);
 
@@ -33,5 +30,15 @@ db.sequelize
   .sync({ force: false })
   .then(() => console.log("Re-sync done"))
   .catch((error) => console.log(error));
+
+
+Product.hasMany(Review,{
+  foreignKey:'product_id',
+  as:'reviews'
+})
+Review.Belongsto(Product,{
+  foreignKey:'product_id',
+  as:'product'
+})
 
 module.exports = db;

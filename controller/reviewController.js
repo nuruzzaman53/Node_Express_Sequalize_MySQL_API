@@ -5,8 +5,14 @@ const Review = db.reviews;
 // Add a new revview //
 
 const addReview = async (req, res) => {
+  const productId = req.params.id;
   try {
-    const newReview = await Review.create(req.body);
+    let info = {
+      product_id: productId,
+      rating: req.body.rating,
+      description: req.body.description,
+    };
+    const newReview = await Review.create(info);
     res.status(200).send(newReview);
   } catch (error) {
     res.status(400).send(error);
