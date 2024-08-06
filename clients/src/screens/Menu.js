@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 
 const Menu = () => {
   return (
-    <Container className='mt-3'>
+    <Container className="mt-3">
       <Row>
         <Col>
-          <h1>Future Cart</h1>
+          <h2>Future Cart</h2>
         </Col>
         <Col>
           <nav>
@@ -19,16 +19,16 @@ const Menu = () => {
                 <Link to="/allProducts">All Products </Link>
               </li>
               <li>
-                <Link to="/portfolio">Portfolio </Link>
+                <Link to="/cart">Cart </Link>
               </li>
               <li>
-                <Link to="/contact">Contact us</Link>
+                <Link to="/signup">Sign up</Link>
               </li>
             </ul>
           </nav>
         </Col>
       </Row>
-      <hr/>
+      <hr />
     </Container>
   );
 };

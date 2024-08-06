@@ -5,11 +5,17 @@ import { Link } from "react-router-dom";
 const Welcome = () => {
   return (
     <Container>
-      <Row className="justify-content-md-center">
-        <Col>
-          <h1 className="front_header">Welcome to React</h1>
-          <Link to="/allProducts" className="front_button">
-            Product Page
+      <Row>
+        <Col className="justify-content-center text-center">
+          <h1>Welcome to React</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus
+            mollitia aspernatur ex ab omnis officiis, sint a et sequi dolor, ut
+            tempora excepturi in voluptatibus harum vero impedit! Quibusdam,
+            neque!
+          </p>
+          <Link to="/allProducts" className="btn btn-info">
+            Shop acccess tools
           </Link>
         </Col>
       </Row>

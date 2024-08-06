@@ -6,6 +6,7 @@ import ProductDetails from "./screens/ProductDetails";
 import ShowProducts from "./screens/ShowProducts";
 import Welcome from "./Welcome";
 import Menu from "./screens/Menu";
+import Signup from "./screens/Signup";
 
 const PageRouter = () => {
   return (
@@ -17,6 +18,7 @@ const PageRouter = () => {
         <Route exact path="/addProduct" element={<AddProduct />} />
         <Route exact path="/updateProduct/:id/" element={<EditProduct />} />
         <Route exact path="/single/:id/" element={<ProductDetails />} />
+        <Route exact path="/signup" element={<Signup />} />
       </Routes>
     </BrowserRouter>
   );

@@ -6,10 +6,10 @@ const ProductCard = ({ product }) => {
   return (
     <>
       <Card style={{ width: "18rem", marginTop: "10px" }}>
-        <Card.Img src={product.image} />
+        <Card.Img src={product.image} loading="lazy" />
         <Card.Body>
           <Card.Title>{product.title}</Card.Title>
-          <Card.Text>{product.description}</Card.Text>
+          <Card.Text>{product.description.substr(0, 60)}</Card.Text>
           <Card.Text>
             <h2 className="product_price">$ {product.price}</h2>
           </Card.Text>

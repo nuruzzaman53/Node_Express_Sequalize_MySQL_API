@@ -18,9 +18,16 @@ const addProduct = async (req, res) => {
       published: req.body.published ? req.body.published : false,
     };
     const product = await Product.create(info);
-    res.status(200).send(product);
+    res.status(200).send({ success: true, data: product });
   } catch (error) {
-    res.status(400).send(error);
+    if (error.name === "SequelizeValidationError") {
+      const errors = error.errors.map((e) => e.message);
+      res.status(400).send({ success: false, errors });
+    } else {
+      res
+        .status(500)
+        .send({ success: false, message: "An unknown error occured" });
+    }
   }
 };
 // get all products //
@@ -31,6 +38,7 @@ const getAllProducts = async (req, res) => {
   });
   res.status(200).send(products);
 };
+
 // get product by id //
 
 const getSingleProduct = async (req, res) => {
@@ -38,23 +46,38 @@ const getSingleProduct = async (req, res) => {
   let product = await Product.findOne({ where: { id: id } });
   res.status(200).send(product);
 };
+
 // get Published product //
 const getPublishedProduct = async (req, res) => {
   const product = await Product.findAll({ where: { published: true } });
   res.status(200).send(product);
 };
+
 // update Product by ID //
 const updateProduct = async (req, res) => {
   let id = req.params.id;
-  let product = await Product.update(req.body, { where: { id: id } });
-  res.status(200).send(product);
+  try {
+    let info = {
+      image: req.file.path,
+      title: req.body.title,
+      description: req.body.description,
+      price: req.body.price,
+      published: req.body.published ? req.body.published : false,
+    };
+    const product = await Product.update(info, { where: { id: id } });
+    res.status(200).send(product);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 };
+
 // Delete a product by ID //
 const deleteProduct = async (req, res) => {
   let id = req.params.id;
   let product = await Product.destroy({ where: { id: id } });
   res.status(200).send("Product deleted");
 };
+
 // Get product reviews //
 const getProductReviews = async (req, res) => {
   const productId = req.params.id;
@@ -71,7 +94,6 @@ const getProductReviews = async (req, res) => {
 };
 
 // image upload controller //
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "Images");

@@ -12,7 +12,9 @@ app.use(express.json()); // parse JSON data from HTTP requests //
 app.use(express.urlencoded({ extended: true })); // permit req.body //
 
 const router = require("./router/productRoutes.js");
+const userRouter = require("./router/userRoutes.js");
 app.use("/api", router);
+app.use("/api/user", userRouter);
 
 //static image folder //
 
