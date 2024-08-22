@@ -18,10 +18,12 @@ const Signup = () => {
     try {
       let userInfo = { name: name, email: email, password: password };
       const newUser = await axios.post("/api/user/addUser", userInfo);
-      setSuccess("User has been created");
-      setName("");
-      setEmail("");
-      setPassword("");
+      if (newUser) {
+        setSuccess("User has been created");
+        setName("");
+        setEmail("");
+        setPassword("");
+      }
     } catch (err) {
       if (err.response && err.response.data.errors) {
         setErrors(err.response.data.errors);

@@ -1,36 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import axios from "axios";
-import { Link } from "react-router-dom";
 import ShowError from "../components/ShowError";
 import ShowSuccess from "../components/ShowSuccess";
+import axios from "axios";
 
 const AddProduct = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
   const [published, setPublished] = useState(true);
   const [errors, setErrors] = useState([]);
   const [success, setSuccess] = useState(null);
+  const [data, setData] = useState([]);
+
+  const allCategories = async () => {
+    const { data } = await axios.get("/api/allCategory");
+    setData(data);
+    console.log(data);
+  };
+
+  useEffect(() => {
+    allCategories();
+  }, []);
 
   const productHandler = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
       formData.append("title", title);
+      formData.append("category", category);
       formData.append("description", description);
       formData.append("price", price);
       formData.append("image", image);
       formData.append("published", published);
 
       const newProduct = await axios.post("/api/addProduct", formData);
-      setSuccess("Product is created successfully");
-      setTitle("");
-      setDescription("");
-      setPrice("");
-      setImage(null);
-      setErrors([]);
+      if (newProduct) {
+        setSuccess("Product is created successfully");
+        setTitle("");
+        setDescription("");
+        setCategory("");
+        setPrice("");
+        setImage(null);
+        setErrors([]);
+      }
     } catch (err) {
       if (err.response && err.response.data.errors) {
         setErrors(err.response.data.errors);
@@ -62,16 +77,30 @@ const AddProduct = () => {
               className="form-control"
               onChange={(e) => setTitle(e.target.value)}
             />
+
+            <label>Category</label>
+            <select
+              className="form-control"
+              name="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {data.map((item) => (
+                <option>{item.name}</option>
+              ))}
+            </select>
+
             <label>Description</label>
             <textarea
-              type="text"
-              rows={6}
+              rows={8}
               cols={50}
-              className="form-control"
+              type="text"
               value={description}
+              className="form-control"
               name="description"
               onChange={(e) => setDescription(e.target.value)}
             />
+
             <label>Price</label>
             <input
               type="number"

@@ -1,5 +1,5 @@
-module.exports = (sequlize, DataTypes) => {
-  const Product = sequlize.define("product", {
+module.exports = (sequelize, DataTypes) => {
+  const Product = sequelize.define("product", {
     image: {
       type: DataTypes.STRING,
       validate: {
@@ -16,6 +16,13 @@ module.exports = (sequlize, DataTypes) => {
         },
       },
     },
+    category: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: { msg: "Category is required" },
+      },
+    },
+
     price: {
       type: DataTypes.INTEGER,
       validate: {
@@ -39,6 +46,5 @@ module.exports = (sequlize, DataTypes) => {
       },
     },
   });
-
   return Product;
 };

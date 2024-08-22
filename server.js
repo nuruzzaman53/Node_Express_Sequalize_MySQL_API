@@ -13,8 +13,10 @@ app.use(express.urlencoded({ extended: true })); // permit req.body //
 
 const router = require("./router/productRoutes.js");
 const userRouter = require("./router/userRoutes.js");
+const categoryRouter = require("./router/categoryRoute.js");
 app.use("/api", router);
 app.use("/api/user", userRouter);
+app.use("/api", categoryRouter);
 
 //static image folder //
 

@@ -13,6 +13,7 @@ const addProduct = async (req, res) => {
     let info = {
       image: req.file.path,
       title: req.body.title,
+      category: req.body.category,
       description: req.body.description,
       price: req.body.price,
       published: req.body.published ? req.body.published : false,

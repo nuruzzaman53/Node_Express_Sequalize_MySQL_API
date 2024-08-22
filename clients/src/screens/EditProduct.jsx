@@ -2,19 +2,25 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import ShowError from "../components/ShowError";
+import ShowSuccess from "../components/ShowSuccess";
 
 const EditProduct = () => {
   const { id } = useParams();
 
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
   const [published, setPublished] = useState(true);
+  const [success, setSuccess] = useState(null);
+  const [errors, setErrors] = useState([]);
 
   const productById = async () => {
     const { data } = await axios.get(`/api/single/${id}`);
     setTitle(data.title);
+    setCategory(data.category);
     setDescription(data.description);
     setPrice(data.price);
     setImage(data.image);
@@ -23,19 +29,36 @@ const EditProduct = () => {
 
   useEffect(() => {
     productById();
-  }, [id]);
+  });
 
   const updateProduct = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("price", price);
-    formData.append("image", image);
-    formData.append("published", published);
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("price", price);
+      formData.append("image", image);
+      formData.append("category", category);
+      formData.append("published", published);
 
-    await axios.put(`/api/updateProduct/${id}`, formData);
-    //alert("Data update successful");
+      const oldProduct = await axios.put(`/api/updateProduct/${id}`, formData);
+      if (oldProduct) {
+        setSuccess("Product is update successfully");
+        setTitle("");
+        setDescription("");
+        setCategory("");
+        setPrice("");
+        setImage(null);
+        setErrors([]);
+      }
+    } catch (err) {
+      if (err.response && err.response.data.errors) {
+        setErrors(err.response.data.errors);
+      } else {
+        setErrors(["An unexpected error occurred"]);
+      }
+    }
   };
 
   return (
@@ -59,6 +82,15 @@ const EditProduct = () => {
               name="title"
               onChange={(e) => setTitle(e.target.value)}
             />
+            <label>Category</label>
+            <select
+              className="form-control"
+              name="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option>{category}</option>
+            </select>
             <label>Description</label>
             <textarea
               rows={8}
@@ -91,7 +123,10 @@ const EditProduct = () => {
               Update product
             </button>
           </form>
+          <br />
+          {success && <ShowSuccess success={success} />}
         </Col>
+        <Col md={6}>{!success && <ShowError errors={errors} />}</Col>
       </Row>
     </Container>
   );

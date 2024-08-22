@@ -41,9 +41,11 @@ const ProductDetails = () => {
     try {
       const reviewData = { rating: rating, description: message };
       const newReview = await axios.post(`/api/addReview/${id}`, reviewData);
-      setSuccess("Review added successfully");
-      setRating("");
-      setMessage("");
+      if (newReview) {
+        setSuccess("Review added successfully");
+        setRating("");
+        setMessage("");
+      }
     } catch (err) {
       if (err.response && err.response.data.errors) {
         setErrors(err.response.data.errors);
